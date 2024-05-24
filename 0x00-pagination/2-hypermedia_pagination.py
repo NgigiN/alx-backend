@@ -40,7 +40,7 @@ class Server:
         start_index, end_index = index_range(page, page_size)
         dataset = self.dataset()
 
-        if dataset is None or start_index > len(dataset):
+        if dataset is None or start_index >= len(dataset):
             return []
 
         return dataset[start_index:end_index]
@@ -50,7 +50,10 @@ class Server:
         Returns:
         Dict[str, Any]: A dictionary with the pagination details."""
         data = self.get_page(page, page_size)
-        total_items = len(self.dataset())
+        if self.dataset() is None:
+            total_items = 0
+        else:
+            total_items = len(self.dataset())
         total_pages = math.ceil(total_items / page_size)
 
         next_page = page + 1 if page < total_pages else None
@@ -62,4 +65,5 @@ class Server:
             'next_page': next_page,
             'prev_page': prev_page,
             'total_pages': total_pages,
+            'data': data
         }
