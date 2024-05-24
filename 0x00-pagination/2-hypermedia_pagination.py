@@ -35,8 +35,10 @@ class Server:
     def get_page(self, page: int = 1, page_size: int = 10) -> List[List]:
         """Retrives a page of data
         """
-        assert isinstance(page, int) and page > 0, "Page must be int > than 0."
-        assert isinstance(page_size, int) and page_size > 0, "be int > than 0."
+        assert isinstance(
+            page, int) and page > 0, "Page must be an integer greater than 0."
+        assert isinstance(
+            page_size, int) and page_size > 0, "Page size must be an integer greater than 0."
 
         start_index, end_index = index_range(page, page_size)
         dataset = self.dataset()
@@ -51,10 +53,8 @@ class Server:
         Returns:
         Dict[str, Any]: A dictionary with the pagination details."""
         data = self.get_page(page, page_size)
-        if self.dataset() is None:
-            total_items = 0
-        else:
-            total_items = len(self.dataset())
+        dataset = self.dataset()
+        total_items = len(dataset)
         total_pages = math.ceil(total_items / page_size)
 
         next_page = page + 1 if page < total_pages else None
